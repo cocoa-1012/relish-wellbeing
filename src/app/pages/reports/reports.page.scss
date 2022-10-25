@@ -1,0 +1,107 @@
+ion-slides {
+    min-height: 100%;
+}
+
+.swiper-slide {
+    align-items: baseline;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.slider-container {
+    margin: 0 auto;
+    padding: 1rem;
+    .swiper-slide {
+        display: flex;
+        flex-direction: column;
+    }
+
+    img {
+        width: 90vw;
+    }
+}
+
+.odd{
+    width: 100%;
+    --background: var(--ion-color-light);
+}
+.even{
+    width: 100%;
+    // --background: white;
+}
+
+h2, h3 {
+    color: var(--ion-color-dark);
+}
+.android-toolbar {
+    ion-segment-button {
+        --ion-color-contrast: white;
+      }
+}
+
+.android-nav-buttons {
+    ion-segment-button {
+        --indicator-color: #82bf6e;
+        --color-checked: #82bf6e;
+      }
+}
+.ios-toolbar {
+    ion-segment-button {
+        --ion-color-contrast: white;
+      }
+}
+.ios-nav-buttons {
+    ion-segment {
+        background-color: #c2dfb8;
+    }
+    ion-segment-button {
+        --indicator-color: #fff;
+        --color-checked: #82bf6e;
+      }
+}
+
+ion-tab-bar {
+    background: #FDEEE6;
+  }
+  ion-tab-button {
+    background: #FDEEE6;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    ion-tab-bar {
+      background: #000;
+    }
+    ion-tab-button {
+      background: #000;
+    }
+  }
+  
+  .ion-toolbar {
+    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.20);
+    padding-bottom: 0px !important;
+  }
+.slider-container {
+    #doughnut-chart-container {
+        width: 100%;
+        margin-bottom: 50px;
+    }
+    ion-slide {
+        display: flex;
+        margin: auto;
+        align-items: center;
+    }
+}
+ion-slides {
+    --bullet-background-active: var(--ion-color-light-green);
+}
+
+ion-progress-bar {
+    --buffer-background: #e187af;
+    --progress-background: var(--ion-color-purple);
+  }
+
+  ion-footer {
+    ion-label {
+      margin-bottom: 0.5rem;
+    }
+  }

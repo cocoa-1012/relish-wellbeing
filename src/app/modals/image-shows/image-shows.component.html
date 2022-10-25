@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar color="orange">
+    <ion-title class="text-white">Image</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" class="text-white">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="content" scrollX="false" scrollY="false">
+  <ion-img [src]="image_Url" class="h-full w-full bg-black"></ion-img>
+</ion-content>

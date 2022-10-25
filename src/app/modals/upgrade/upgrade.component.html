@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="type == 1" class="p-4">
+    <h1 class="text-center text-xl mb-4 font-semibold">Upgrade to access hundreds of activity ideas every month</h1>
+
+    <p class="text-lg font-semibold">Features:</p>
+    <ul class="px-8 list-disc">
+      <li>Hundreds of Activity Ideas</li>
+      <li>Personalised Activity Finder</li>
+      <li>Activity Level Assessment</li>
+      <li>Helpful Tips &amp; Tutotials</li>
+      <li>Product How-to Guides</li>
+      <li>Printable Activity Resources</li>
+    </ul>
+
+    <h2 class="text-center mt-8 font-black text-2xl">£1.99</h2>
+    <h3 class="mb-4 text-center text-lg">per month</h3>
+
+
+    <div class="text-center">
+      <ion-button size="large" color="primary" fill="outline" (click)="upgrade_package(1)">
+        Upgrade now
+      </ion-button>
+    </div>
+  </div>
+
+  <div *ngIf="type == 2" class="p-4">
+    <h1 class="text-center text-xl mb-4 font-semibold">Upgrade to quick and easy activity reporting</h1>
+
+    <p class="text-lg font-semibold">Features:</p>
+    <ul class="px-8 list-disc">
+      <li>Hundreds of Activity Ideas</li>
+      <li>Personalised Activity Finder</li>
+      <li>Activity Level Assessment</li>
+      <li>Helpful Tips &amp Tutorials</li>
+      <li>How-to Guides</li>
+      <li>Printable Activity Resources</li>
+      <li>Easy Activity Reporting</li>
+      <li>Activity Planner</li>
+      <li>Resident Profiles</li>
+      <li>Resident Feedback</li>
+      <li>Resident Wellbeing Tracker</li>
+      <li>PDF Report Generator</li>
+      <li>Activity Data</li>
+    </ul>
+
+    <h2 class="text-center mt-8 font-black text-2xl">£29.99</h2>
+    <h3 class="mb-4 text-center text-lg">per month</h3>
+
+
+    <div class="text-center">
+      <ion-button size="large" color="primary" fill="outline" (click)="upgrade_package(2)">
+        Upgrade now
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

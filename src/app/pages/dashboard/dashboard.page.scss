@@ -1,0 +1,84 @@
+.swiper-slide {
+  text-align: left;
+}
+
+.card-container {
+  -webkit-overflow-scrolling: touch;
+  ion-card {
+    max-width: 300px;
+    width: 100%;
+  }
+  app-activity, app-activity-skeleton {
+    flex: 0 0 auto;
+  }
+}
+
+div[scrollx=true] {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+     display: none;
+  }
+   .scroll-item {
+     flex: 0 0 auto;
+  }
+}
+.video-card {
+  width: 250px;
+}
+.slider-container {
+  #doughnut-chart-container {
+      width: 90%;
+      margin-bottom: 50px;
+  }
+  ion-slide {
+      display: flex;
+      margin: auto;
+      align-items: center;
+  }
+}
+
+ion-tab-bar {
+  background: #FDEEE6;
+}
+ion-tab-button {
+  background: #FDEEE6;
+}
+
+ion-toolbar {
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.20);
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-tab-bar {
+    background: #000;
+  }
+  ion-tab-button {
+    background: #000;
+  }
+  .peach-icon {
+    display: none;
+  }
+}
+
+.bg-shadow-root-none::part(native) {
+  background: none;
+}
+
+ion-slides {
+  --bullet-background-active: var(--ion-color-dark-green);
+}
+
+#featured_activity {
+  margin-bottom: 30px;
+}
+.toolbars {
+  padding-bottom: 0px !important;
+}
+
+ion-footer {
+  ion-label {
+    margin-bottom: 0.5rem;
+  }
+}

@@ -1,0 +1,142 @@
+<ion-header translucent="true">
+  <ion-toolbar color="aquamarine" class="text-white">
+    <ion-title>Activity Finder</ion-title>
+    <ion-icon class="flex p-2 mobile-fab" slot="end"  [name]="showStage ? 'close-outline': 'person-circle-outline'" size="large" *ngIf="isFamily" (click)="showStage = !showStage"></ion-icon>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content fullscreen="true">
+  <!-- <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Activity Finder</ion-title>
+    </ion-toolbar>
+  </ion-header> -->
+
+  <div scrollx="true">
+    <section class="scroll-item">
+      <header class="mb-2"><strong>PAL Stage</strong></header>
+      <div class="buttons">
+        <ion-chip (click)="toggleFilter(filter.slug, 'stage')" *ngFor="let filter of filters.stage" class="stage-chip" [style.border-color]="filter.color" [style.background-color] = "isActive(filter.slug) ? filter.color : 'white'" [style.color] = "isActive(filter.slug) ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img [src]="filter.image">
+          </ion-thumbnail>
+          <ion-label>{{ filter.label }}</ion-label>
+          <ion-icon [name]="isActive(filter.slug) ? 'remove-circle': 'add-circle-outline'" [style.color]="filter.color"></ion-icon>
+        </ion-chip>
+      </div>
+    </section>
+
+    <section class="scroll-item">
+      <header class="mb-2"><strong>Time</strong></header>
+      <div class="buttons">
+        <ion-chip class="stage1-chip" (click)="toggleFilter('Ive got 10 min', 'time')" [style.background-color] = "isActive('Ive got 10 min') ? '#004131': '#fff'" [style.color] = "isActive('Ive got 10 min') ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img src="/assets/others/10mins.svg">
+          </ion-thumbnail>
+          <ion-label>I've got 10 min</ion-label>
+          <ion-icon [name]="isActive('Ive got 10 min') ? 'remove-circle': 'add-circle-outline'" [style.color]="'#004131'"></ion-icon>
+        </ion-chip>
+        <ion-chip class="stage1-chip" (click)="toggleFilter('Ive got 20 min', 'time')" [style.background-color] = "isActive('Ive got 20 min') ? '#004131': '#fff'" [style.color] = "isActive('Ive got 20 min') ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img src="/assets/others/20mins.svg" >
+          </ion-thumbnail>
+          <ion-label>I've got 20 min</ion-label>
+          <ion-icon [name]="isActive('Ive got 20 min') ? 'remove-circle': 'add-circle-outline'" [style.color]="'#004131'"></ion-icon>
+        </ion-chip>
+        <ion-chip class="stage1-chip" (click)="toggleFilter('Ive got 60 min', 'time')" [style.background-color] = "isActive('Ive got 60 min') ? '#004131': '#fff'" [style.color] = "isActive('Ive got 60 min') ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img src="/assets/others/60mins.svg">
+          </ion-thumbnail>
+          <ion-label>I've got 60 min</ion-label>
+          <ion-icon [name]="isActive('Ive got 60 min') ? 'remove-circle': 'add-circle-outline'" [style.color]="'#004131'"></ion-icon>
+        </ion-chip>
+      </div>
+    </section>
+
+    <section class="scroll-item">
+      <header class="mb-2"><strong>Type</strong></header>
+      <div class="buttons">
+        <ion-chip class="stage1-chip" (click)="toggleFilter('Group', 'type')" [style.background-color] = "isActive('Group') ? '#004131': '#fff'" [style.color] = "isActive('Group') ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img src="/assets/others/group.svg">
+          </ion-thumbnail>
+          <ion-label>Group</ion-label>
+          <ion-icon [name]="isActive('Group') ? 'remove-circle': 'add-circle-outline'" [style.color]="'#004131'"></ion-icon>
+        </ion-chip>
+        <ion-chip class="stage1-chip" (click)="toggleFilter('Individual', 'type')" [style.background-color] = "isActive('Individual') ? '#004131': '#fff'" [style.color] = "isActive('Individual') ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img src="/assets/others/individual.svg">
+          </ion-thumbnail>
+          <ion-label>Individual</ion-label>
+          <ion-icon [name]="isActive('Individual') ? 'remove-circle': 'add-circle-outline'" [style.color]="'#004131'"></ion-icon>
+        </ion-chip>
+      </div>
+    </section>
+
+  </div>
+
+  <div scrollx="true">
+    <section class="scroll-item">
+      <header class="mb-2"><strong>Areas of interest</strong></header>
+      <div class="buttons">
+        <ion-chip *ngFor="let button of buttons" class="stage-chip" (click)="toggleFilter(button.title, 'interest')" [style.border-color]="button.color" [style.background-color] = "isActive(button.title) ? button.color : 'white'" [style.color] = "isActive(button.title) ? 'white' : 'black'">
+          <ion-thumbnail>
+            <img src={{button.image}}>
+          </ion-thumbnail>
+          <ion-label>{{button.title}}</ion-label>
+          <ion-icon [name]="isActive(button.title) ? 'remove-circle': 'add-circle-outline'" [style.color]="button.color"></ion-icon>
+        </ion-chip>
+      </div>
+    </section>
+  </div>
+
+  <div class="flex flex-wrap justify-center">
+    <app-activity *ngFor="let activity of activities" [activity]="activity" [isBasic]="isBasic" (click)="gotoActivityDetail(activity)"></app-activity>
+    <div *ngIf="activities.length == 0 && loading" class="flex flex-wrap justify-center">
+      <app-activity-skeleton *ngFor="let activity of emptyArray(8)"></app-activity-skeleton>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap justify-center">
+    <div *ngIf="activities.length == 0 && !loading" class="flex flex-wrap">
+      No activities found with the current filters. Try reducing the number of filters.
+    </div>
+  </div>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="getData($event)">
+    <ion-infinite-scroll-content loadingText="Loading more activities..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar class="ion-toolbar base-toolbar">
+    <div class="flex">
+      <ion-label class="flex-1 pl-2 mb-0"><strong>{{ totalNumberOfResults }}</strong> results found</ion-label>
+      <!-- <ion-buttons collapse="true" slot="end">
+        <ion-icon slot="icon-only" name="bookmark"></ion-icon>
+      </ion-buttons> -->
+    </div>
+  </ion-toolbar>
+</ion-footer>
+
+<ion-footer *ngIf="canViewPal">
+  <ion-toolbar class="base-toolbar">
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button (click)="presentPal()">
+          <ion-icon name="help-outline"></ion-icon>
+          <ion-label>Help me find my stage</ion-label>
+        </ion-tab-button>
+
+        <!-- <ion-tab-button (click)="toggleSaved()">
+          <ion-icon name="bookmark-outline"></ion-icon>
+          <ion-label>My activities</ion-label>
+        </ion-tab-button> -->
+
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,87 @@
+ion-card {
+  max-width: 350px;
+  width: 100%;
+}
+ion-img {
+  height: 180px;
+  width: 350px;
+  object-fit:cover;
+}
+
+.mini-icons{
+  ion-img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.paid-activity {
+  position: relative;
+  img, ion-card-content, ion-row {
+    opacity: 0.6;
+  }
+}
+.paid-activity::before {
+  content: '';
+  width: 100%;
+  height: 80%;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-image: url('../../../assets/padlock.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
+.paid-activity:after {
+  content: 'Upgrade to Unlock';
+  position: absolute;
+  background: rgba(216,216,216,0.70);
+  color: #4A4A4A;
+  letter-spacing: 0.04px;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  pointer-events: none;
+}
+
+mbsc-segmented {
+  p {
+    color: #333;
+  }
+}
+
+ion-tab-bar {
+  background: #FDEEE6;
+}
+ion-tab-button {
+  background: #FDEEE6;
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-tab-bar {
+    background: #000;
+  }
+  ion-tab-button {
+    background: #000;
+  }
+}
+
+.ion-toolbar {
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.20);
+  padding-bottom: 0px !important;
+}
+
+ion-footer {
+  ion-label {
+    margin-bottom: 0.5rem;
+  }
+}

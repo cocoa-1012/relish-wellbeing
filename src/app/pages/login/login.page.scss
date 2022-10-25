@@ -1,0 +1,25 @@
+.logo-container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  img {
+    max-width: 100px;
+  }
+}
+
+.slider-container {
+  margin: 0 auto;
+  background: #F9E7DB;
+  .swiper-slide {
+    display: flex;
+    flex-direction: column;
+  }
+  h1 {
+    color: #3c3c3c;
+    padding-bottom: 2rem;
+  }
+
+
+
+
+}

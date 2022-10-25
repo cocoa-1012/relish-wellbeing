@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="orange">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/residents"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ title }} report detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item lines="none">
+    <ion-avatar slot="start" class="w-16">
+      <img src={{avatar}}>
+    </ion-avatar>
+    <ion-label class="mt-8">
+      <p>Reviewed of: <strong>{{activityLabel}}</strong></p>
+      <p>Reported on: <strong>{{ report.when_formatted }}</strong></p>
+      <p>Coordinated by: <strong>{{report.coordinated_by_formatted}}</strong></p>
+      <p>Report grouping: <strong>{{group}}</strong></p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="none" class="mt-4">
+    <ion-thumbnail slot="start" class="w-16">
+      <img src={{faceImg}}>
+    </ion-thumbnail>
+    <ion-label>
+      <p class="flex flex-wrap"><strong>{{fname}}</strong>&nbsp;said they were {{residential_report.success}} during the activity</p>
+      <p *ngIf="residential_report.self_feedback"><strong>{{fname}}</strong> gave the feedback himself</p>
+      <p *ngIf="residential_report.duration"><strong>{{fname}}</strong> took part for {{residential_report.duration}} mins</p>
+      <!-- <p>Martin Vowles</p> -->
+    </ion-label>
+  </ion-item>
+  <div class="p-4 mt-4">
+    <ion-label>
+      <h2>Observations:</h2>
+    </ion-label>
+    <div class="mb-6 mt-4">
+      <div *ngFor="let item of observationsArray.green">
+        <ion-button fill="solid" size="small" color="light-green">
+          <p class="text-white">{{item}}</p>
+        </ion-button>
+      </div>
+      <div *ngFor="let item of observationsArray.amber">
+        <ion-button fill="solid" size="small" color="orange">
+          <p>{{item}}</p>
+        </ion-button>
+      </div>
+      <div *ngFor="let item of observationsArray.red">
+        <ion-button fill="solid" size="small" color="danger">
+          <p>{{item}}</p>
+        </ion-button>
+      </div>
+    </div>
+    <ion-label>
+      <h2>Activity Benefits</h2>
+    </ion-label>
+    <div class="flex items-center mb-6 mt-4">
+      <dd class="flex mt-1 text-sm text-gray-900 dark:text-gray-100"  *ngFor="let item of benefitsArr">
+        <div class="w-12" *ngIf="item.thumbnail">
+          <ion-img src={{item.thumbnail}}></ion-img>
+        </div>
+        <div class="mt-4 ml-2 mr-2">
+          {{item.name}}
+        </div>
+      </dd>
+    </div>
+    <ion-label>
+      <h2>Activity Category</h2>
+    </ion-label>
+    <div class="flex items-center mb-6 mt-4">
+      <dd class="flex mt-1 text-sm text-gray-900 dark:text-gray-100">
+        <div class="w-12">
+          <ion-img src={{activityImage}}></ion-img>
+        </div>
+        <div class="mt-4 ml-4">
+          {{activityLabel}}
+        </div>
+      </dd>
+    </div>
+    <ion-label>
+      <h2>Activity Bonuses</h2>
+    </ion-label>
+    <div class="flex items-center mb-6 mt-4">
+      <div *ngFor="let item of bonusesArr">
+        <ion-button fill="solid" size="small" color="light-green">
+          <p class="text-white">{{item}}</p>
+        </ion-button>
+      </div>
+    </div>
+    <ion-label>
+      <h2>Activity Lead's comments</h2>
+    </ion-label>
+    <ion-label *ngIf="residential_report.additionalObservations">
+      <p>Jane rated the activity positive, they became more animated and smiled.</p>
+    </ion-label>
+  </div>
+</ion-content>

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{activity.title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <div class="p-8 pt-4">
+    <ion-img [src]="activity.thumbnail"></ion-img>
+    <div class="flex justify-center items-center border border-solid p-4" (click)="toggleSaveActivity(activity)">
+        <ion-icon name="star-outline"></ion-icon>
+        <h1 class="pl-2" *ngIf="!activity.is_saved">SAVE ACTIVITY</h1>
+        <h1 class="pl-2" *ngIf="activity.is_saved">UNSAVE ACTIVITY</h1>
+    </div>
+    <div *ngIf="has_downloads" class="flex justify-center items-center border border-solid p-4">
+      <ion-icon name="mail"></ion-icon>
+      <h1 class="pl-2" (click)="emailResources(activity)">EMAIL RESOURCES</h1>
+    </div>
+
+    <div class="pt-4 pb-2">
+      <h1 class="text-2xl">{{activity.title}}</h1>
+    </div>
+
+    <div class="grid grid-cols-2">
+      <div>
+        <ion-label>Activity Level</ion-label>
+        <div class="mini-icons flex gap-2 mt-2" *ngIf="activity.activity_level.length">
+          <ion-img *ngFor="let level of activity.activity_level" [src]="'/assets/levels/' + level + '.svg'"></ion-img>
+        </div>
+      </div>
+      <div>
+        <ion-label>Interest</ion-label>
+        <div class="mini-icons flex gap-2 mt-2" *ngIf="activity.interests.length">
+          <ion-img class="bg-white rounded text-white" *ngFor="let interest of activity.interests" [src]="'/assets/filters/' + interest + '.svg'"></ion-img>
+        </div>
+      </div>
+    </div>
+
+    <div [innerHTML]="activity.description" class="pt-10"></div>
+  </div>
+</ion-content>

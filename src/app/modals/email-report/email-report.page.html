@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar [color]="type == 'report' ? 'light-green' : 'orange'">
+    <ion-title class="text-white">{{ type == 'report' ? 'Email Reports' : 'Email Resident Report' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()" class="text-white">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-list-header>
+      Select a date range for your report
+    </ion-list-header>
+
+    <div class="p-4">
+      <ion-button [class]="isToday ? 'active-button' : 'inactive-button'" expand="block" (click)="today()">Today</ion-button>
+      <ion-button [class]="isYesterday ? 'active-button' : 'inactive-button'" expand="block" (click)="yesterday()">Yesterday</ion-button>
+      <ion-button [class]="isThisWeek ? 'active-button' : 'inactive-button'" expand="block" (click)="thisWeek()">This Week</ion-button>
+      <ion-button [class]="isLastMonth ? 'active-button' : 'inactive-button'" expand="block" (click)="lastMonth()">Last Month</ion-button>
+      <ion-button [class]="isThisMonth ? 'active-button' : 'inactive-button'" expand="block" (click)="thisMonth()">This Month</ion-button>
+      <ion-button [class]="isCustom ? 'active-button' : 'inactive-button'" expand="block" (click)="externalRange.instance.show(); custom();">Custom</ion-button>
+    </div>
+
+    <div class="mx-4">
+      <mbsc-range [options]="dateSettings" [(ngModel)]="range" #externalRange="mobiscroll">
+        <mbsc-range-start placeholder="Please Select...">From</mbsc-range-start>
+        <mbsc-range-end placeholder="Please Select...">Until</mbsc-range-end>
+      </mbsc-range>
+    </div>
+
+    <div *ngIf="type != 'report' && residentId==null" class="mt-2">
+      <ion-item>
+        <ion-label class="whitespace-normal">Exclude residents who have not taken part within the selected date range</ion-label>
+        <ion-checkbox checked="true" [(ngModel)]="exclude_inactive"></ion-checkbox>
+      </ion-item>
+    </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons class="px-4 justify-center">
+      <ion-button color="success" expand="block" (click)="generate()" [disabled]="!range">Generate report</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-footer>

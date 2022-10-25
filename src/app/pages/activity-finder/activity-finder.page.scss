@@ -1,0 +1,77 @@
+div[scrollx=true] {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 15px 0;
+  padding: 0 15px;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+     display: none;
+  }
+   .scroll-item {
+     flex: 0 0 auto;
+  }
+}
+
+.stage-chip {
+  --background: transparent;
+  border: 1px solid;
+  ion-thumbnail {
+    --size: 25px;
+    margin-right: 5px;
+  }
+}
+
+.stage1-chip {
+  --background: transparent;
+  border: 1px solid;
+  border-color: #004131;
+  ion-thumbnail {
+    --size: 25px;
+    margin-right: 5px;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-fab {
+      display: none;
+  }
+  .mobileshow {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .webshow {
+    // display: none !important;
+  }
+}
+
+ion-tab-bar {
+  background: #FDEEE6;
+}
+ion-tab-button {
+  background: #FDEEE6;
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-tab-bar {
+    background: #000;
+  }
+  ion-tab-button {
+    background: #000;
+  }
+}
+
+.ion-toolbar {
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.20);
+}
+.base-toolbar {
+  padding-bottom: 0px !important;
+}
+
+ion-footer {
+  ion-label {
+    margin-bottom: 0.5rem;
+  }
+
+}

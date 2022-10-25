@@ -1,0 +1,24 @@
+
+.choose-button::part(native) {
+    background: #99c85f;
+  }
+
+.active-button::part(native) {
+    border: solid #99c85f;
+    background-color: #99c85f;
+}
+
+.inactive-button::part(native) {
+    border: solid 1px #99c85f;
+    background-color: rgba(255, 255, 255, 0);
+    color: #000;
+}
+.whitespace-normal {
+    white-space: normal !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .inactive-button::part(native) {
+        color: #f1e6ef;
+    }
+  }

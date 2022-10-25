@@ -1,0 +1,289 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="orange">
+    <ion-title>
+      Residents
+    </ion-title>
+    <ion-buttons collapse="true" slot="end">
+      <ion-icon slot="icon-only" name="search" (click)="presentSearch()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="orange" class="shadow-xl z-50">
+    <ion-segment value="0" (ionChange)="segmentChange($event)">
+      <ion-segment-button value="0">
+        <ion-label>Dashboard</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label>Residents</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2">
+          <ion-label>Messages <span class="unread-badge" *ngIf="totalUnreadMessages > 0">{{totalUnreadMessages}}</span></ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="current_platform == 'android'">
+    <ion-searchbar #searchbar [(ngModel)]="search_term" (ionChange)="searchChanged($event)" (ionFocus)="searchFocused()" animated="true" showCancelButton="focus" showClearButton="always" (ionClear)="searchCleared()"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scroll-x="false">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Residents</ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="current_platform != 'android'">
+      <ion-searchbar #searchbar [(ngModel)]="search_term" (ionChange)="searchChanged($event)" (ionFocus)="searchFocused()" animated="true" showCancelButton="focus" showClearButton="always" (ionClear)="searchCleared()"></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-slides #slides pager="false" scrollbar="true" [options]="slideOpts" (ionSlideDidChange)="slideDidChange($event)">
+    <ion-slide>
+      <section class="w-full">
+
+        <section class="flex flex-col w-full items-center">
+
+          <ion-list>
+            <ion-list-header>
+              <ion-label>Attendance in the last 30 days</ion-label>
+            </ion-list-header>
+          </ion-list>
+
+          <div class="grid grid-cols-2 p-4 gap-4 w-full max-w-md">
+            <div class="relative">
+              <canvas #attendanceActiveCanvas></canvas>
+              <div class="absolute top-0 h-full w-full items-center flex justify-center">
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide">{{ activeCount }}</p>
+              </div>
+            </div>
+            <div class="relative">
+              <canvas #attendanceInactiveCanvas></canvas>
+              <div class="absolute top-0 h-full w-full items-center flex justify-center">
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide">{{ inactiveCount }}</p>
+              </div>
+            </div>
+            <div class="text-center text-sm">
+              <p>Active</p>
+            </div>
+            <div class="text-center text-sm">
+              <p>Inactive</p>
+            </div>
+          </div>
+
+          <ion-list>
+            <ion-list-header>
+              <ion-label>Engagement in the last 30 days</ion-label>
+            </ion-list-header>
+          </ion-list>
+
+
+          <div class="grid grid-cols-3 p-4 gap-x-4 w-full max-w-md">
+            <div class="metric">
+              <div class="circle happy" (click)="filterDataBy('happy')">
+                <svg class="progress-ring" height="100" width="100">
+                  <circle class="progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke="#3AA662" stroke-width="17" [ngStyle]="{ 'strokeDashoffset' : happyPercentageOffset}"></circle>
+                </svg>
+                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="smile" class="svg-inline--fa fa-smile fa-w-16 face" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm-80-216c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm4 72.6c-20.8 25-51.5 39.4-84 39.4s-63.2-14.3-84-39.4c-8.5-10.2-23.7-11.5-33.8-3.1-10.2 8.5-11.5 23.6-3.1 33.8 30 36 74.1 56.6 120.9 56.6s90.9-20.6 120.9-56.6c8.5-10.2 7.1-25.3-3.1-33.8-10.1-8.4-25.3-7.1-33.8 3.1z"></path></svg>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="circle indifferent" (click)="filterDataBy('indifferent')">
+                <svg class="progress-ring" height="100" width="100">
+                  <circle class="progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke="#F8D640" stroke-width="17" [ngStyle]="{ 'strokeDashoffset' : indifferentPercentageOffset}"></circle>
+                </svg>
+                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="meh" class="svg-inline--fa fa-meh fa-w-16 face" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm-80-216c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160-64c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm8 144H160c-13.2 0-24 10.8-24 24s10.8 24 24 24h176c13.2 0 24-10.8 24-24s-10.8-24-24-24z"></path></svg>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="circle sad" (click)="filterDataBy('sad')">
+                <svg class="progress-ring" height="100" width="100">
+                  <circle class="progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke="#D93B3E" stroke-width="17" [ngStyle]="{ 'strokeDashoffset' : sadPercentageOffset}"></circle>
+                </svg>
+                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="frown" class="svg-inline--fa fa-frown fa-w-16 face" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm-80-216c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160-64c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-80 128c-40.2 0-78 17.7-103.8 48.6-8.5 10.2-7.1 25.3 3.1 33.8 10.2 8.4 25.3 7.1 33.8-3.1 16.6-19.9 41-31.4 66.9-31.4s50.3 11.4 66.9 31.4c8.1 9.7 23.1 11.9 33.8 3.1 10.2-8.5 11.5-23.6 3.1-33.8C326 321.7 288.2 304 248 304z"></path></svg>
+              </div>
+            </div>
+            <div class="text-center text-sm">
+              <p>Positive</p>
+            </div>
+            <div class="text-center text-sm">
+              <p>Neutral</p>
+            </div>
+            <div class="text-center text-sm">
+              <p>Negative</p>
+            </div>
+          </div>
+        </section>
+        <div class="flex w-full border-b py-2" *ngIf="isFiltered">
+          <div class="flex">
+            <ion-title slot="start" class="w-36">Filtered by</ion-title>
+            <ion-thumbnail>
+              <img [src]="faceUrl">
+            </ion-thumbnail>
+          </div>
+          <ion-title slot="end" class="text-right"  color="orange" (click)="filterClose()">Close</ion-title>
+        </div>
+
+        <ion-list *ngIf="dashboardTabIndex == '0' && isFiltered">
+          <ion-item *ngFor="let resident of filteredMostData" (click)="gotoDetail(resident)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="!resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              <ion-img *ngIf="resident.imageURL" [src]="resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-thumbnail slot="end">
+              <div class="face2" [class]="resident.success"></div>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ resident.first_name }} {{ resident.last_name }} <span *ngIf="resident.preferred_name">({{ resident.preferred_name }})</span></h2>
+              <p>{{ resident.attended_label }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ion-list *ngIf="dashboardTabIndex == '1' && isFiltered">
+          <ion-item *ngFor="let resident of filteredLeastData" (click)="gotoDetail(resident)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="!resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              <ion-img *ngIf="resident.imageURL" [src]="resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-thumbnail slot="end">
+              <div class="face2" [class]="resident.success"></div>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ resident.first_name }} {{ resident.last_name }} <span *ngIf="resident.preferred_name">({{ resident.preferred_name }})</span></h2>
+              <p>{{ resident.attended_label }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div class="p-4" [class]="current_platform === 'android' ? 'android-nav-buttons' : 'ios-nav-buttons'">
+          <ion-segment #dashboardSegment value="0" (ionChange)="dashboardSegmentChanged($event)">
+            <ion-segment-button value="0">
+              <ion-label>10 most active</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="1">
+              <ion-label>10 least active</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+
+        <ion-list *ngIf="dashboardTabIndex == '0'">
+          <ion-item *ngFor="let resident of mostActive" (click)="gotoDetail(resident)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="!resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              <ion-img *ngIf="resident.imageURL" [src]="resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-thumbnail slot="end">
+              <div class="face2" [class]="resident.success"></div>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ resident.first_name }} {{ resident.last_name }} <span *ngIf="resident.preferred_name">({{ resident.preferred_name }})</span></h2>
+              <p>{{ resident.attended_label }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ion-list *ngIf="dashboardTabIndex == '1'">
+          <ion-item *ngFor="let resident of leastActive" (click)="gotoDetail(resident)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="!resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              <ion-img *ngIf="resident.imageURL" [src]="resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-thumbnail slot="end">
+              <div class="face2" [class]="resident.success"></div>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ resident.first_name }} {{ resident.last_name }} <span *ngIf="resident.preferred_name">({{ resident.preferred_name }})</span></h2>
+              <p>{{ resident.attended_label }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+      </section>
+
+    </ion-slide>
+
+    <ion-slide>
+      <section class="w-full">
+        <div class="w-full text-center mt-10 p-4" *ngIf="!residents.length && !loading_residents">
+          <ion-icon name="information-circle-outline" class="w-12 h-12"></ion-icon>
+          <p class="mt-8" *ngIf="request_data.search">There are no residents matching your search term.</p>
+          <p class="mt-8" *ngIf="!request_data.search">There are no residents added yet.</p>
+          <ion-button class="mt-8 max-w-md mx-auto" expand="block" color="purple">Add a new resident</ion-button>
+        </div>
+        <div class="w-full absolute" *ngIf="!residents.length && loading_residents">
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+        </div>
+        <div class="p-4" *ngIf="!(!residents.length && !loading_residents)"  [class]="current_platform === 'android' ? 'android-nav-buttons' : 'ios-nav-buttons'">
+          <ion-segment [value]="request_data.sortBy" (ionChange)="sortSegmentChanged($event)" class="sortable">
+            <ion-segment-button value="a-z" (click)="changeOrder()">
+              <ion-label>A-Z<span [ngClass]="{up : request_data.sortBy == 'a-z' && request_data.sortDirection == 'asc', down : request_data.sortBy == 'a-z' && request_data.sortDirection == 'desc' }"></span></ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="completed" (click)="changeOrder()">
+              <ion-label>Completed<span [ngClass]="{up : request_data.sortBy == 'completed' && request_data.sortDirection == 'asc', down : request_data.sortBy == 'completed' && request_data.sortDirection == 'desc' }"></span></ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="engagement" (click)="changeOrder()">
+              <ion-label>Engagement<span [ngClass]="{up : request_data.sortBy == 'engagement' && request_data.sortDirection == 'asc', down : request_data.sortBy == 'engagement' && request_data.sortDirection == 'desc' }"></span></ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+        <ion-list>
+          <ion-item *ngFor="let resident of residents" (click)="gotoDetail(resident)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="!resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              <ion-img *ngIf="resident.imageURL" [src]="resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-thumbnail slot="end">
+              <div class="face2" [class]="resident.success"></div>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ resident.first_name }} {{ resident.last_name }} <span *ngIf="resident.preferred_name">({{ resident.preferred_name }})</span></h2>
+              <p>{{ resident.attended_label }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-infinite-scroll threshold="100px" (ionInfinite)="getResidentsData($event)">
+          <ion-infinite-scroll-content loadingText="Loading more residents..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </section>
+    </ion-slide>
+    <ion-slide>
+      <section class="w-full pr-4">
+        <div class="w-full text-center mt-32" *ngIf="!canChat">
+          <p>To access messages please upgrade <br />your package to Care Home <br /> Premium+ Family</p>
+        </div>
+        <ion-list *ngIf="!isFamily">
+          <ion-item *ngFor="let message of messages">
+            <ion-avatar slot="start" (click)="gotoDetail(message.resident)">
+              <ion-img *ngIf="!message.resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              <ion-img *ngIf="message.resident.imageURL" [src]="message.resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-label (click)="gotoMessages(message.resident)">
+              <h2>{{ message.resident.first_name }} {{ message.resident.last_name }} <span *ngIf="message.resident.preferred_name">({{ message.resident.preferred_name }})</span></h2>
+            </ion-label>
+            <ion-badge *ngIf="message.unread_count > 0" slot="end" color="warning" class="unread-list-badge">{{ message.unread_count }}</ion-badge>
+          </ion-item>
+        </ion-list>
+      </section>
+    </ion-slide>
+  </ion-slides>
+
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-toolbar">
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button (click)="presentAddResidentModal()">
+          <ion-icon name="add-circle"></ion-icon>
+          <ion-label>Add New Resident</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button (click)="emailReport()">
+          <ion-icon name="mail"></ion-icon>
+          <ion-label>Email Reports</ion-label>
+        </ion-tab-button>
+
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

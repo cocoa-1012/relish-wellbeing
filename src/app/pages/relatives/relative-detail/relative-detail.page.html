@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar color="orange">
+    <ion-buttons slot="start">
+      <ion-back-button text="Relatives"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scroll-x="false">
+
+  <ion-card>
+
+    <div class="flex gap-2 pl-4">
+      <div class="w-16 h-16 pt-4">
+        <ion-avatar slot="start" class="w-16 h-16">
+          <ion-img *ngIf="!resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+          <ion-img *ngIf="resident.imageURL" [src]="resident.imageURL"></ion-img>
+        </ion-avatar>
+      </div>
+      <ion-card-header>
+        <ion-card-subtitle><span *ngIf="resident.preferred_name">{{ resident.first_name }} {{ resident.last_name }} &mdash; </span>{{ resident.age }} years old</ion-card-subtitle>
+        <ion-card-title>
+          <span *ngIf="resident.preferred_name">{{ resident.preferred_name }}</span>
+          <span *ngIf="!resident.preferred_name">{{ resident.first_name }} {{ resident.last_name }}</span>
+        </ion-card-title>
+      </ion-card-header>
+    </div>
+
+    <ion-card-content>
+
+      <div class="mb-4 font-medium text-gray-400">Last 30 days</div>
+
+      <div class="flex gap-8">
+        <dl class="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 w-full">
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              DoB
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              {{ resident.dob_formatted }}
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Room number
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              {{ resident.room_number }}
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Activity level
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 flex gap-2 justify-center items-center">
+              <div>
+                <ion-img class="w-6" *ngIf="resident.activity_level == 1" src="/assets/levels/reflex.svg"></ion-img>
+              </div>
+              <div>
+                <ion-img class="w-6" *ngIf="resident.activity_level == 2" src="/assets/levels/sensory.svg"></ion-img>
+              </div>
+              <div>
+                <ion-img class="w-6" *ngIf="resident.activity_level == 3" src="/assets/levels/exploratory.svg"></ion-img>
+              </div>
+              <div>
+                <ion-img class="w-6" *ngIf="resident.activity_level == 4" src="/assets/levels/planned.svg"></ion-img>
+              </div>
+              <p *ngIf="resident.activity_level == 1" class="text-reflex">Reflex</p>
+              <p *ngIf="resident.activity_level == 2" class="text-sensory">Sensory</p>
+              <p *ngIf="resident.activity_level == 3" class="text-exploratory">Exploratory</p>
+              <p *ngIf="resident.activity_level == 4" class="text-planned">Planned</p>
+              <p *ngIf="!resident.activity_level" class="text-planned">Unknown</p>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+
+  <div class="p-4">
+    <ion-segment value="0" (ionChange)="segmentChange($event)">
+      <ion-segment-button value="0">
+        <ion-label>Activities</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label>About me</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2" (click)="gotoMessages()">
+        <ion-label>Messages</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <ion-slides pager="false" scrollbar="false" [options]="slideOpts" auto (ionSlideDidChange)="slideDidChange($event)">
+    <ion-slide>
+      <section class="w-full text-center mt-10 p-4" *ngIf="!resident.residential_reports_last_month_count">
+          <ion-icon name="information-circle-outline" class="w-12 h-12"></ion-icon>
+          <p class="mt-8">{{ title }} hasn't engaged in any activities recently.</p>
+      </section>
+
+      <section class="w-full" *ngIf="resident.residential_reports_last_month_count">
+
+
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Activities in the last 30 days</ion-label>
+          </ion-list-header>
+        </ion-list>
+
+        <ion-item *ngFor="let residential_report of residential_reports">
+          <ion-thumbnail slot="end">
+            <div class="face2" [class]="residential_report.success"></div>
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ residential_report.report.activityLabel }}</h2>
+            <p>{{ residential_report.report.when_formatted }}</p>
+          </ion-label>
+        </ion-item>
+
+      </section>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-card-content>
+        <div class="flex gap-8">
+          <dl class="grid gap-x-8 gap-y-6 w-full">
+            <div class="w-full">
+              <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100 flex gap-2 justify-center items-center">
+                <div>
+                  <ion-img class="w-20" *ngIf="resident.activity_level == 1" src="/assets/levels/reflex.svg"></ion-img>
+                </div>
+                <div>
+                  <ion-img class="w-20" *ngIf="resident.activity_level == 2" src="/assets/levels/sensory.svg"></ion-img>
+                </div>
+                <div>
+                  <ion-img class="w-20" *ngIf="resident.activity_level == 3" src="/assets/levels/exploratory.svg"></ion-img>
+                </div>
+                <div>
+                  <ion-img class="w-20" *ngIf="resident.activity_level == 4" src="/assets/levels/planned.svg"></ion-img>
+                </div>
+                <div>
+                  <dt>
+                    <h1 *ngIf="resident.activity_level == 1" class=" text-blue-500">Reflex</h1>
+                    <h1 *ngIf="resident.activity_level == 2" class=" text-blue-500">Sensory</h1>
+                    <h1 *ngIf="resident.activity_level == 3" class=" text-blue-500">Exploratory</h1>
+                    <h1 *ngIf="resident.activity_level == 4" class=" text-blue-500">Planned</h1>
+                    <h1 *ngIf="!resident.activity_level" class="text-planned text-blue-500">Unknown</h1>
+                  </dt>
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </ion-card-content>
+    </ion-slide>
+
+    <ion-slide>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

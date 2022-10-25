@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Choose activity</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <section class="w-full h-full relative overflow-y-scroll">
+    <div class="sticky top-0 fixed-bg">
+      <div class="w-full absolute" *ngIf="!isReportActivityListReady">
+        <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      </div>          
+      <ion-searchbar  debounce="2000" placeholder="Search activities"></ion-searchbar>
+      <ion-list-header>
+        <ion-label>Select an activity</ion-label>
+      </ion-list-header>
+    </div>
+
+    <ion-radio-group >
+      <ion-item *ngFor="let activity of reportActivityList">
+        <ion-thumbnail slot="start" *ngIf="activity.image">
+          <ion-img [src]="activity.image"></ion-img>
+        </ion-thumbnail>
+        <ion-label>{{ activity.name }}</ion-label>
+        <ion-radio [value]="activity.id" (click)="selectedReportActivity=activity.id;selectedReportActivityTitle=activity.name"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+
+    <ng-container *ngIf="!isReportActivityListReady">
+      <ion-item *ngFor="let i of [].constructor(20)">
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </ion-label>
+        <ion-radio></ion-radio>
+      </ion-item>
+    </ng-container>
+  </section>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="blue">
+    <ion-buttons class="grid">
+      <ion-button color="light" (click)="choose()" [disabled]="!selectedReportActivity">Choose</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

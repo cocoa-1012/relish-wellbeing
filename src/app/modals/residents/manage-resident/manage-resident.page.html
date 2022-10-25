@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="id">Edit resident profile for {{ first_name.value }} {{ last_name.value }}</ion-title>
+    <ion-title *ngIf="!id">Add new resident</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cancel</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <form [formGroup]="resident">
+
+    <button ion-item (click)="getPictureViaCamera()" class="w-full flex items-center p-4">
+      <ion-avatar item-start>
+        <ion-img *ngIf="!image" src="https://support.active-minds.org/img/default-avatar.png" class="avatar"></ion-img>
+        <ion-img *ngIf="image" [src]="image" class="avatar"></ion-img>
+      </ion-avatar>
+      <h2 class="ml-6" *ngIf="!image">Upload Image</h2>
+      <h2 class="ml-6" *ngIf="image">Replace Image</h2>
+    </button>
+
+    <ion-progress-bar [value]="uploadProgress" class="absolute"></ion-progress-bar>
+
+
+    <ion-item>
+      <ion-label position="floating">First name</ion-label>
+      <ion-input type="text" formControlName="first_name"></ion-input>
+    </ion-item>
+
+    <div *ngIf="errors.first_name && errors.first_name.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.first_name }}</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Last name</ion-label>
+      <ion-input type="text" formControlName="last_name"></ion-input>
+    </ion-item>
+    <div *ngIf="errors.last_name && errors.last_name.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.last_name }}</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Preferred name</ion-label>
+      <ion-input type="text" formControlName="preferred_name"></ion-input>
+    </ion-item>
+    <div *ngIf="errors.preferred_name && errors.preferred_name.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.preferred_name }}</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Date of birth</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" type="text" formControlName="dob" min="1900"></ion-datetime>
+    </ion-item>
+    <div *ngIf="errors.dob && errors.dob.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.dob }}</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Activity level</ion-label>
+      <ion-select formControlName="activity_level" interface="popover">
+        <ion-select-option value="1">1 - Reflex</ion-select-option>
+        <ion-select-option value="2">2 - Sensory</ion-select-option>
+        <ion-select-option value="3">3 - Exploratory</ion-select-option>
+        <ion-select-option value="4">4 - Planned</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div *ngIf="errors.activity_level && errors.activity_level.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.activity_level }}</span>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Room number</ion-label>
+      <ion-input type="text" formControlName="room_number"></ion-input>
+    </ion-item>
+    <div *ngIf="errors.room_number && errors.room_number.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.room_number }}</span>
+    </div>
+
+  </form>
+
+  <div class="p-4 mt-6" *ngIf="id">
+    <ion-button color="danger" expand="block" (click)="archive()">
+      <ion-icon slot="start" name="archive"></ion-icon>
+      Archive resident
+    </ion-button>
+  </div>
+
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons class="grid grid-cols-1">
+      <ion-button color="orange" (click)="save()">
+        <ion-icon slot="start" name="save"></ion-icon>
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

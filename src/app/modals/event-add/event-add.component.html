@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ isEdit ? 'Edit event' : 'Add event' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h1 class="p-2 py-6">Select an activity from the list or add your own</h1>
+  <ion-toolbar color="blue" class="grid py-0 px-10 mx-2 mb-6 w-auto">
+    <ion-buttons class="grid">
+      <ion-button color="light" (click)="chooseReportActivity()">{{ reportActivity ? 'Change' : 'Choose' }} Activity <span *ngIf="reportActivityTitle">&nbsp;from '{{ reportActivityTitle }}'</span></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div *ngIf="errors.title && errors.title.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+    <span class="-mt-2">{{ errors.title }}</span>
+  </div>
+
+
+
+  <ion-list>
+    <ion-item>
+      <ion-label color="primary" floating>Notes</ion-label>
+      <ion-input color="primary" [(ngModel)]="description"></ion-input>
+    </ion-item>
+
+    <div *ngIf="errors.description && errors.description.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.description }}</span>
+    </div>
+
+    <mbsc-range [options]="dateSettings">
+      <mbsc-range-start [(ngModel)]="starts">Starts</mbsc-range-start>
+      <mbsc-range-end [(ngModel)]="ends">Ends</mbsc-range-end>
+    </mbsc-range>
+
+    <div *ngIf="errors.starts && errors.starts.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.starts }}</span>
+    </div>
+    <div *ngIf="errors.ends && errors.ends.length" class="errors bg-black bg-red-200 px-5 py-2 text-red-600 text-sm">
+      <span class="-mt-2">{{ errors.ends }}</span>
+    </div>
+
+
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="blue">
+    <ion-buttons class="grid">
+      <ion-button color="light" (click)="post()" *ngIf="!isEdit">Add event</ion-button>
+      <ion-button color="light" (click)="edit()" *ngIf="isEdit">Save Changes</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

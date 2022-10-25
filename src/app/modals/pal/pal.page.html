@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar color="dark-green">
+    <ion-title>Pool activity level checklist</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-progress-bar [value]="progress" class="absolute left-0" *ngIf="progress"></ion-progress-bar>
+  <ion-slides pager="false" [options]="slideOpts" class="h-full" (ionSlideDidChange)="slideChange($event)">
+    <ion-slide>
+      <section class="p-4">
+        <h1 class="text-xl mb-4 mt-20">Completing the checklist</h1>
+        <p class="mb-2">For each activity, the statements refer to a different level of ability. Thinking of the last two weeks, tick the statement that represents the person’s ability in each activity. There should be only one tick for each activity. If in doubt about which statement to tick, choose the level of ability which represents the person’s average performance over the last two weeks. Make sure you tick one statement for each of the activities.</p>
+        <p>Relish is a licensed user of the Pool activity level system</p>
+      </section>
+    </ion-slide>
+    <ng-container *ngFor="let question of questions; index as i">
+      <ion-slide class="align-center flex">
+        <section class="p-4 w-full">
+          <h1 class="text-2xl pb-2">Question {{ i+1 }}/{{ questions.length }}</h1>
+          <div class="questions">
+            <ion-list-header>
+              <ion-label class="text-xl">{{ question.question }}</ion-label>
+            </ion-list-header>
+            <ion-list>
+              <ion-button expand="block" fill="outline" *ngFor="let answer of question.answers;index as j" class="mb-4 item-button" detail="false" lines="none" [ngClass]="{'selBG': isActive(i,j)}" (click)="setAnswer(i, j)">
+                <p class="p-3 w-full normal-case text-lg leading-normal" color="dark-green">{{ answer.answer }}</p>
+              </ion-button>
+            </ion-list>
+          </div>
+        </section>
+      </ion-slide>
+    </ng-container>
+    <ion-slide class="align-center flex">
+      <section class="p-4 block">
+        <h1 class="text-2xl">Result</h1>
+
+        <div [class]="'level level-' + result"></div>
+
+        <h2 class="text-xl mb-4" *ngIf="result == 1">Activity Level 1 - Reflex</h2>
+        <h2 class="text-xl mb-4" *ngIf="result == 2">Activity Level 2 - Sensory</h2>
+        <h2 class="text-xl mb-4" *ngIf="result == 3">Activity Level 3 - Exploratory</h2>
+        <h2 class="text-xl mb-4" *ngIf="result == 4">Activity Level 4 - Planned</h2>
+        <p class="mb-2" *ngIf="result == 1">Will respond best to touch, sound and smell</p>
+        <p class="mb-2" *ngIf="result == 2">Respond best to sounds, smell and taste</p>
+        <p class="mb-2" *ngIf="result == 3">Can follow instructions in a similar surrounding</p>
+        <p class="mb-2" *ngIf="result == 4">Can carry out activities alone but may need support</p>
+        <!-- <ion-button (click)="gotoVideo()">Discover more</ion-button> -->
+      </section>
+    </ion-slide>
+    <ion-slide class="align-center flex" *ngIf="mode == 1">
+      <section class="block w-full h-full">
+        <ion-list>
+          <ion-list-header>
+            Select Residents
+          </ion-list-header>
+          <ion-item *ngFor="let resident of matchingResidents">
+            <ion-avatar slot="start">
+              <ion-img [src]="resident.imageURL"></ion-img>
+            </ion-avatar>
+            <ion-label>{{ resident.first_name }} {{ resident.last_name }} <span *ngIf="resident.preferred_name">{{ resident.preferred_name }}</span></ion-label>
+            <ion-chip slot="end" [class]="'chip-color-' + resident.activity_level">
+              <ion-label>
+                <span *ngIf="resident.activity_level == 1">Reflex</span>
+                <span *ngIf="resident.activity_level == 2">Sensory</span>
+                <span *ngIf="resident.activity_level == 3">Exploratory</span>
+                <span *ngIf="resident.activity_level == 4">Planned</span>
+              </ion-label>
+            </ion-chip>
+            <ion-checkbox slot="end" [(ngModel)]="resident.checked" (ionChange)="updateResidents()"></ion-checkbox>
+          </ion-item>
+
+          <ion-item *ngIf="matchingResidents.length == 0">
+            There are no residents
+          </ion-item>
+
+        </ion-list>
+      </section>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark-green">
+    <ion-buttons>
+      <ion-button class="flex-1" expand="full" (click)="next()" *ngIf="slideIndex == 0 && !isLastPage">Start</ion-button>
+      <ion-button class="flex-1" expand="full" (click)="back()" *ngIf="slideIndex != 0">Back</ion-button>
+      <ion-button class="flex-1" expand="full" (click)="complete()" *ngIf="isLastPage && mode == 0">Complete</ion-button>
+      <ion-button class="flex-1" expand="full" (click)="next()" *ngIf="isLastPage && mode == 1 && !isFamily && canReport">Add to residents</ion-button>
+      <ion-button class="flex-1" expand="full" (click)="changeResidentsPAL()" *ngIf="isLastPageModeOne && mode == 1">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

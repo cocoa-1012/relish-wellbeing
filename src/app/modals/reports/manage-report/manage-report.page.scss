@@ -1,0 +1,109 @@
+ion-slides {
+  min-height: 100%;
+}
+
+.swiper-slide {
+  align-items: baseline;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.fixed-bg {
+  background-color: var(--ion-background-color, #fff);
+  z-index: 500;
+}
+
+.mbsc-fr-w {
+  border: 0;
+}
+
+.report-image {
+  max-height: 50vh;
+  margin: 0 auto;
+  display: block;
+}
+.report-image::part(image) {
+  max-height: 50vh;
+}
+
+.face {
+    width: calc(33% - 20px);
+    padding-bottom: calc(33% - 20px);
+    margin: 10px;
+    max-width: 128px;
+
+    &.happy {
+      background: url('../../../../assets/faces/smile-regular-grey.svg') no-repeat center;
+      background-size: contain;
+    }
+
+    &.indifferent {
+      background: url('../../../../assets/faces/meh-regular-grey.svg') no-repeat center;
+      background-size: contain;
+    }
+
+    &.sad {
+      background: url('../../../../assets/faces/frown-regular-grey.svg') no-repeat center;
+      background-size: contain;
+    }
+
+}
+.header-green {
+    .happy.active {
+      background: url('../../../../assets/faces/smile-regular.svg') no-repeat center;
+      background-size: contain;
+    }
+
+    .indifferent.active {
+      background: url('../../../../assets/faces/meh-regular.svg') no-repeat center;
+      background-size: contain;
+    }
+
+    .sad.active {
+      background: url('../../../../assets/faces/frown-regular.svg') no-repeat center;
+      background-size: contain;
+    }
+}
+
+.face-container {
+    display: flex;
+    margin-bottom:16px;
+    justify-content: center;
+}
+
+
+.custom-radio {
+  button {
+    border-style: solid;
+  }
+}
+
+.button-group {
+  [color=lightgreen].active {
+    background: #99C860;
+
+  }
+  [color=orange].active {
+    background: #F7A34C;
+  }
+  [color=red].active {
+    background: #df114b;;
+  }
+}
+
+ion-progress-bar {
+  --buffer-background: #e187af;
+  --progress-background: var(--ion-color-purple);
+}
+
+.activeDuration {
+  background-color: #99c85f;
+  color: #fff;
+  border: solid 1px #99c85f;
+}
+
+.inactiveDuration {
+  background-color: none;
+  color: #99c85f;
+  border: solid 1px #99c85f;
+}

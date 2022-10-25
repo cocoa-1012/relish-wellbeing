@@ -1,0 +1,31 @@
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+
+    <ion-tab-button tab="dashboard" class="ripple-effect">
+      <ion-icon class="std-tab tab-dashboard"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="residents" class="ripple-effect" *ngIf="!isRelative && !isBasic">
+      <ion-icon class="std-tab tab-residents"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="relatives" class="ripple-effect" *ngIf="isRelative">
+      <ion-icon class="std-tab tab-residents"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="reports" class="ripple-effect" *ngIf="!isRelative && !isBasic">
+      <ion-icon class="std-tab tab-reports"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="my-activities" class="ripple-effect" *ngIf="!isRelative">
+      <ion-icon class="std-tab tab-my-activities"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="activity-finder" class="ripple-effect">
+      <ion-icon class="std-tab tab-activity-finder"></ion-icon>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+
+</ion-tabs>

@@ -1,0 +1,194 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="light-green" >
+    <ion-title class="text-white">
+      Reports
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="light-green" [class]="current_platform === 'android' ? 'android-toolbar' : 'ios-toolbar'">
+    <ion-segment value="0" (ionChange)="segmentChange($event)">
+      <ion-segment-button value="0">
+        <ion-label [class]="current_platform === 'android' ? 'text-white' : 'none'">Dashboard</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label [class]="current_platform === 'android' ? 'text-white' : 'none'">Completed</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2">
+        <ion-label [class]="current_platform === 'android' ? 'text-white' : 'none'">Outstanding</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scroll-x="false">
+<!--
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Reports</ion-title>
+    </ion-toolbar>
+  </ion-header> -->
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-slides #slides pager="false" scrollbar="true" [options]="slideOpts" (ionSlideDidChange)="slideDidChange($event)" [class]="current_platform === 'android' ? 'android-nav-buttons' : 'ios-nav-buttons'">
+    <ion-slide>
+      <section class="w-full">
+        <div class="w-full absolute" *ngIf="!reports.length && loading_reports">
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+        </div>
+        <div class="p-4" *ngIf="!(!reports.length && !loading_reports)">
+          <ion-segment [value]="request_data.filterByDays" (ionChange)="dashboardFilterSegmentChanged($event)">
+            <ion-segment-button value="7">
+              <ion-label>Last 7 days</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="30">
+              <ion-label>Last 30 days</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="60">
+              <ion-label>Last 60 days</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+        <section class="max-w-lg pt-52 slider-container" *ngIf="!isTablet">
+          <ion-slides pager="true" [options]="slideGraphOpts">
+            <ion-slide>
+              <div id="doughnut-chart-container">
+                <canvas #dashboardActivityTimeDeliveredCanvas></canvas>
+              </div>
+            </ion-slide>
+            <ion-slide>
+              <div id="doughnut-chart-container">
+                <canvas #dashboardAttendanceCanvas></canvas>
+              </div>
+            </ion-slide>
+            <ion-slide>
+              <div id="doughnut-chart-container">
+                <canvas #dashboardActivityBonusBreakdownCanvas></canvas>
+              </div>
+            </ion-slide>
+          </ion-slides>
+        </section>
+        <section class="flex flex-col w-full items-center"  *ngIf="isTablet">
+          <div class="grid grid-cols-1 p-4 gap-4 w-full max-w-md">
+            <div class="relative">
+              <canvas #dashboardActivityTimeDeliveredCanvas></canvas>
+            </div>
+            <div class="relative">
+              <canvas #dashboardAttendanceCanvas></canvas>
+            </div>
+            <div class="relative">
+              <canvas #dashboardActivityBonusBreakdownCanvas></canvas>
+            </div>
+          </div>
+        </section>
+      </section>
+    </ion-slide>
+
+    <ion-slide>
+      <section class="w-full">
+        <div class="p-4">
+          <ion-segment [value]="request_data.filterByDays" (ionChange)="completedFilterSegmentChanged($event)">
+            <ion-segment-button value="7">
+              <ion-label>Last 7 days</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="30">
+              <ion-label>Last 30 days</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="60">
+              <ion-label>Last 60 days</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+
+        <div class="w-full text-center mt-10 p-4" *ngIf="!reports.length && !loading_reports">
+          <ion-icon name="information-circle-outline" class="w-12 h-12"></ion-icon>
+          <p class="mt-8">There are no reports added in the last {{ request_data.filterByDays }} days.</p>
+          <ion-button class="mt-8 max-w-md mx-auto" expand="block" color="purple" (click)="presentAddReportModal()">Add New report</ion-button>
+        </div>
+        <div class="w-full absolute" *ngIf="!reports.length && loading_reports">
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+        </div>
+
+
+        <ion-list class="w-full">
+          <ion-item button *ngFor="let activity of reports; let i = index;" (click)="completedItem(activity)">
+            <ion-avatar slot="end">
+              <donut [items]="activity.overview" [radius]="20" [width]="10" [fontSize]="30" [showPercentage]="false"></donut>
+            </ion-avatar>
+            <ion-label class="flex-grow">
+              <h2>{{ activity.activityLabel }}</h2>
+              <h3>{{ activity.when_formatted }}</h3>
+            </ion-label>
+            <ion-label class="flex-none w-20">
+              <h3>{{activity.attended_count}} Attended</h3>
+              <h3>{{activity.absent_count}} Declined</h3>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="getReportsData($event)">
+          <ion-infinite-scroll-content loadingText="Loading more reports..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+
+      </section>
+    </ion-slide>
+
+    <ion-slide>
+      <section class="w-full" *ngIf="outstanding">
+        <div class="w-full absolute" *ngIf="!outstanding.length && loading_reports">
+          <ion-progress-bar type="indeterminate"></ion-progress-bar>
+        </div>
+        <div class="w-full text-center mt-10 p-4" *ngIf="!outstanding.length && !loading_reports">
+          <ion-icon name="information-circle-outline" class="w-12 h-12"></ion-icon>
+          <p class="mt-8">There are no outstanding reports in the last {{ request_data.filterByDays }} days.</p>
+        </div>
+
+        <div class="p-4" *ngIf="!(!outstanding.length && !loading_reports)">
+          <ion-segment [value]="request_data.filterByDays" (ionChange)="outstandingFilterSegmentChanged($event)">
+            <ion-segment-button value="7">
+              <ion-label>Last 7 days</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="30">
+              <ion-label>Last 30 days</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="60">
+              <ion-label>Last 60 days</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+        <ion-list>
+          <ion-item *ngFor="let report of outstanding">
+            <ion-label (click)="editReport(report)">
+              {{ report.activityLabel }}
+              <p>Starting on {{ report.updated_at_formatted }}</p>
+            </ion-label>
+            <ion-badge slot="end" *ngIf="!report.app_user_id">Report</ion-badge>
+            <ion-badge slot="end" color="light-green" class="p-2" *ngIf="report.app_user_id">Incomplete</ion-badge>
+            <ion-icon slot="end" color="danger" name="trash-outline" (click)="deleteReport(report)"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </section>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-toolbar">
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button (click)="presentAddReportModal()">
+          <ion-icon name="add-circle"></ion-icon>
+          <ion-label>Add New Report</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button (click)="emailReports()">
+          <ion-icon name="mail"></ion-icon>
+          <ion-label>Email Reports</ion-label>
+        </ion-tab-button>
+
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,95 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="blue">
+    <ion-title>
+      My Activities
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar color="blue" *ngIf="canViewEvents">
+    <ion-segment value="0" (ionChange)="segmentChange($event)">
+      <ion-segment-button value="0">
+        <ion-label>Calendar</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label>Saved</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="w-screen">
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-slides pager="false" scrollbar="true" [options]="slideOpts" (ionSlideDidChange)="slideDidChange($event)">
+    <ion-slide *ngIf="canViewEvents">
+      <section class="w-full">
+
+        <div class="p-4">
+          <ion-segment value="month" (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="month">
+              <ion-label>Month</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="week">
+              <ion-label>Week</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="day">
+              <ion-label>Day</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+
+        <mbsc-eventcalendar [data]="events" [marked]="events" [options]="eventSettings" [view]="viewOptions" #mbscCal="mobiscroll"></mbsc-eventcalendar>
+        <div class="fake-footer"></div>
+      </section>
+    </ion-slide>
+    <ion-slide>
+      <section>
+        <div class="flex flex-wrap justify-center">
+          <div *ngFor="let activity of savedActivitiesArray" >
+            <ion-card class="scroll-item" [button]="true" color="light" (click)="gotoActivityDetail(activity)">
+              <ion-img [src]="activity.thumbnail"></ion-img>
+              <ion-card-header class="text-left">
+                <ion-card-subtitle>Activity</ion-card-subtitle>
+                <ion-card-title>{{ activity.title }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="grid grid-cols-2">
+                <div>
+                  <ion-card-subtitle class="text-left">Level</ion-card-subtitle>
+                  <div class="mini-icons flex gap-2 mt-2">
+                    <ion-img *ngFor="let level of activity.activity_level" [src]="'/assets/levels/' + level + '.svg'"></ion-img>
+                  </div>
+                </div>
+                <div>
+                  <ion-card-subtitle  class="text-left">Interest</ion-card-subtitle>
+                  <div class="mini-icons flex gap-2 mt-2">
+                    <ion-img class="bg-white rounded text-white" *ngFor="let interest of activity.interests" [src]="'/assets/filters/' + interest + '.svg'"></ion-img>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
+      </section>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer *ngIf="canAddEvents">
+  <ion-toolbar class="ion-toolbar">
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button (click)="addEvent()">
+          <ion-icon name="add-circle"></ion-icon>
+          <ion-label>Add Event</ion-label>
+        </ion-tab-button>
+        <ion-tab-button (click)="emailCalendar()">
+          <ion-icon name="mail"></ion-icon>
+          <ion-label>Email Weekly Calendar</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

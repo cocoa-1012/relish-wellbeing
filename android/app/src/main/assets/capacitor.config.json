@@ -1,0 +1,12 @@
+{
+	"appId": "com.relish.wellbeing",
+	"appName": "Relish Wellbeing",
+	"bundledWebRuntime": false,
+	"webDir": "www",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		}
+	},
+	"cordova": {}
+}

@@ -1,0 +1,228 @@
+<ion-header>
+  <ion-toolbar color="light-green">
+    <ion-buttons slot="start">
+      <ion-button class="text-white" (click)="setBackButtonAction()">
+        <ion-icon name="chevron-back-outline"></ion-icon> {{ back_title }}
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="text-white">{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="relative z-10">
+    <ion-img [src]="report.image" *ngIf="report.image" class="report-image"></ion-img>
+    <ion-img src="/assets/placeholder.jpg" *ngIf="!report.image" class="report-image"></ion-img>
+    <div class="absolute w-1/4 top-3/4 right-5 bg-white rounded-full border-4 border-solid border-white" *ngIf="report.overview">
+      <donut [items]="report.overview" [radius]="20" [width]="10" [fontSize]="20" [showPercentage]="true"></donut>
+    </div>
+  </div>
+
+
+  <ion-card>
+
+    <div class="flex gap-2">
+      <ion-card-header>
+        <ion-card-subtitle>{{ report.group }} activity</ion-card-subtitle>
+        <ion-card-title>
+          {{ report.activityLabel }}
+        </ion-card-title>
+      </ion-card-header>
+    </div>
+
+    <ion-card-content>
+
+      <div class="flex gap-8">
+        <dl class="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 w-full">
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Activity category
+            </dt>
+            <dd class="flex mt-1 text-sm text-gray-900 dark:text-gray-100">
+              <div class="w-12">
+                <ion-img src={{activityImage}}></ion-img>
+              </div>
+              <div class="mt-4 ml-4">
+                {{activityLabel}}
+              </div>
+            </dd>
+
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Activity coordinators rating
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              <div class="w-12">
+                <div class="face2" [ngClass]="report.success"></div>
+              </div>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Held on
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              {{ report.when_formatted }}
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Coordinated by
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              {{ report.coordinated_by_formatted }}
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Attended
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              {{ report.attended_count }}
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-sm font-medium text-gray-500">
+              Absent
+            </dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
+              {{ report.absent_count }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="text-sm mt-4 font-medium text-gray-500">Last updated on {{ report.updated_at_formatted }}</div>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card *ngIf="report.thoughts">
+    <ion-card-header>
+      <ion-card-title>
+        Session notes
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ report.thoughts }}</p>
+    </ion-card-content>
+  </ion-card>
+
+
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Residents who attended</ion-label>
+    </ion-list-header>
+  </ion-list>
+  <ion-list>
+    <div scrollx="true" class="card-container">
+      <ng-container *ngFor="let residential_report of report.residential_reports">
+        <ion-card class="scroll-item" [button]="true" *ngIf="residential_report.absent == 0" (click)="gotoResidentialReport(residential_report)">
+            <div class="relative">
+              <ng-container *ngIf="residential_report.resident">
+                <ion-img *ngIf="residential_report.resident.imageURL" [src]="residential_report.resident.imageURL"></ion-img>
+                <ion-img *ngIf="!residential_report.resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              </ng-container>
+              <ng-container *ngIf="!residential_report.resident">
+                <ion-img src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+              </ng-container>
+              <div class="absolute">
+                <div class="face2" [ngClass]="residential_report.success"></div>
+              </div>
+            </div>
+            <ion-card-header>
+              <ng-container *ngIf="residential_report.resident">
+                <ion-card-subtitle>{{ residential_report.resident.first_name }} {{ residential_report.resident.last_name }} <span *ngIf="residential_report.resident.preferred_name">({{ residential_report.resident.preferred_name }})</span></ion-card-subtitle>
+              </ng-container>
+              <ng-container *ngIf="!residential_report.resident">
+                <ion-card-subtitle>Archived resident</ion-card-subtitle>
+              </ng-container>
+            </ion-card-header>
+            <div class="px-0 pb-4">
+              <ion-chip color="success" *ngIf="residential_report.self_feedback">
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                <ion-label>Self&nbsp;Reported</ion-label>
+              </ion-chip>
+              <ion-chip [color]="getChipColour(residential_report.success)">
+                <ion-avatar>
+                  <div class="face2" [ngClass]="residential_report.success"></div>
+                </ion-avatar>
+                <ion-label class="capitalize">{{ residential_report.success }}</ion-label>
+              </ion-chip>
+            </div>
+        </ion-card>
+      </ng-container>
+    </div>
+  </ion-list>
+
+  <ion-list *ngIf="report.selected_benefit_slugged.length">
+    <ion-list-header>
+      <ion-label>Benefits</ion-label>
+    </ion-list-header>
+  </ion-list>
+
+  <ion-list>
+    <div scrollx="true" class="card-container">
+      <ion-card class="scroll-item" [button]="true" class="with-benefit" [ngClass]="benefit" *ngFor="let benefit of report.selected_benefit_slugged">
+        <ion-avatar item-start></ion-avatar>
+      </ion-card>
+    </div>
+  </ion-list>
+
+
+  <div *ngIf="report.absent_count">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Residents who where absent</ion-label>
+      </ion-list-header>
+    </ion-list>
+    <ion-list>
+      <div scrollx="true" class="card-container">
+        <ng-container *ngFor="let residential_report of report.residential_reports">
+          <ion-card class="scroll-item" [button]="true" *ngIf="residential_report.absent == 1" (click)="gotoResidentialReport(residential_report)">
+              <div class="relative">
+                <ng-container *ngIf="residential_report.resident">
+                  <ion-img *ngIf="residential_report.resident.imageURL" [src]="residential_report.resident.imageURL"></ion-img>
+                  <ion-img *ngIf="!residential_report.resident.imageURL" src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+                </ng-container>
+                <ng-container *ngIf="!residential_report.resident">
+                  <ion-img src="https://support.active-minds.org/img/default-avatar.png"></ion-img>
+                </ng-container>
+              </div>
+              <ion-card-header>
+                <ng-container *ngIf="residential_report.resident">
+                  <ion-card-subtitle>{{ residential_report.resident.first_name }} {{ residential_report.resident.last_name }} <span *ngIf="residential_report.resident.preferred_name">({{ residential_report.resident.preferred_name }})</span></ion-card-subtitle>
+                </ng-container>
+                <ng-container *ngIf="!residential_report.resident">
+                  <ion-card-subtitle>Archived resident</ion-card-subtitle>
+                </ng-container>
+              </ion-card-header>
+          </ion-card>
+        </ng-container>
+      </div>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar class="ion-toolbar">
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button (click)="editReport(report)">
+          <ion-icon name="create-outline"></ion-icon>
+          <ion-label>Edit Report</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button (click)="EmailReport()" [disabled]="!enableReportEmailBTN">
+          <ion-icon name="mail"></ion-icon>
+          <ion-label>Email Report</ion-label>
+        </ion-tab-button>
+
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

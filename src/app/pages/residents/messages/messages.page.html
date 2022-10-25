@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="orange">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ title }}'s messages</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-progress-bar type="indeterminate" *ngIf="messages.length == 0 && loading_messages" class="fixed"></ion-progress-bar>
+  <ion-infinite-scroll threshold="0px" (ionInfinite)="getMessagesData($event)" position="top">
+    <ion-infinite-scroll-content loadingText="Loading older messages..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- <div class="flex flex-col gap-1 items-center p-4" (click)="getMessagesData(true)" *ngIf="next_page_url">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+    Load older messages
+  </div> -->
+
+  <ol class="chat-container p-4">
+      <li class="overflow-hidden rounded-md mb-2 max-w-sm md:max-w-lg" [ngClass]="message.app_user_id == app_user_id ? 'pull-right': 'pull-left'" *ngFor="let message of messages">
+        <div class="bg-white bg-opacity-60 text-sm flex gap-8 px-4 py-1 justify-between"><span>{{ message.from }}</span><span>{{ message.long_ago }}</span></div>
+        <blockquote class="px-4 py-2" *ngIf="message.mimetype == 'text/plain'"><p>{{ message.message }}</p></blockquote>
+        <ion-img class="message-image" *ngIf="message.mimetype.includes('image/')" [src]="message.message" (ionImgDidLoad)="imageLoaded()" (click)="openImgModal(message.message)" ></ion-img>
+      </li>
+  </ol>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item class="items-center">
+      <ion-button slot="start" (click)="attachment()" fill="clear"><ion-icon name="attach" slot="icon-only"></ion-icon></ion-button>
+      <ion-textarea *ngIf="!image" autoGrow="true" rows="1" maxLength="500" [(ngModel)]="inputMessage" autocomplete="off" (ionFocus)="scrollToBottom()" (keyup.enter)="send()" placeholder="Type a message..."></ion-textarea>
+      <div class="relative" *ngIf="image">
+        <svg class="w-6 h-6 absolute top-0 right-0 m-4 text-white drop-shadow-lg rounded-full" (click)="clearImage()" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <ion-img [src]="image" class="limit-img rounded-xl overflow-hidden my-2"></ion-img>
+      </div>
+      <ion-button slot="end" (click)="send()" fill="clear" [disabled]="!inputMessage && !image" *ngIf="!busy"><ion-icon name="send" slot="icon-only"></ion-icon></ion-button>
+      <ion-button slot="end" fill="clear" [disabled]="1" *ngIf="busy"><ion-icon name="send-outline" slot="icon-only"></ion-icon></ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

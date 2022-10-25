@@ -1,0 +1,21 @@
+<ion-card [ngClass]="isBasic && !activity.is_free ? 'paid-activity' : 'free-activity'" class="scroll-item" [button]="true" color="light">
+  <ion-img [src]="activity.thumbnail" (ionError)="failedImageLoad($event)"></ion-img>
+  <ion-card-header [translucent]="false">
+    <ion-card-subtitle>Activity</ion-card-subtitle>
+    <ion-card-title>{{ activity.title }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content class="grid grid-cols-2">
+    <div>
+      <ion-card-subtitle>Level</ion-card-subtitle>
+      <div class="mini-icons flex gap-2 mt-2" *ngIf="activity.activity_level.length">
+        <ion-img *ngFor="let level of activity.activity_level" [src]="'/assets/levels/' + level + '.svg'"></ion-img>
+      </div>
+    </div>
+    <div>
+      <ion-card-subtitle>Interest</ion-card-subtitle>
+      <div class="mini-icons flex gap-2 mt-2" *ngIf="activity.interests.length && activity.interests != ''">
+        <ion-img class="bg-white rounded text-white" *ngFor="let interest of activity.interests" [src]="'/assets/filters/' + interest + '.svg'"></ion-img>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

@@ -1,0 +1,68 @@
+.std-tab {
+  background: #979796;
+}
+
+.tab-dashboard {
+  -webkit-mask-image: url('/assets/navigation/home.svg');
+  mask-image: url('/assets/navigation/home.svg');
+}
+.tab-residents {
+  -webkit-mask-image: url('/assets/navigation/residents.svg');
+  mask-image: url('/assets/navigation/residents.svg');
+}
+.tab-reports {
+  -webkit-mask-image: url('/assets/navigation/reports.svg');
+  mask-image: url('/assets/navigation/reports.svg');
+}
+.tab-my-activities {
+  -webkit-mask-image: url('/assets/navigation/calendar.svg');
+  mask-image: url('/assets/navigation/calendar.svg');
+}
+.tab-activity-finder {
+  -webkit-mask-image: url('/assets/navigation/activites.svg');
+  mask-image: url('/assets/navigation/activites.svg');
+}
+
+.tab-selected {
+  .tab-dashboard {
+    // background: #df114b;
+    background: var(--ion-color-dark-green);
+  }
+  .tab-residents {
+    // background: #00b2a8;
+    background: var(--ion-color-orange);
+  }
+  .tab-reports {
+    // background: #99c860;
+    background: var(--ion-color-light-green);
+  }
+  .tab-my-activities {
+    // background: #67b5e1;
+    background: var(--ion-color-blue);
+  }
+  .tab-activity-finder {
+    // background: #00b2a8;
+    background: var(--ion-color-aquamarine);
+  }
+}
+
+ion-tab-button {
+  border-top: solid 1.5px #ccc;
+  background: #FDEEE6;
+}
+ion-tab-bar {
+  background: #FDEEE6;
+}
+.ripple-effect {
+  --ripple-color: #EBDEE9;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  ion-tab-bar {
+    background: #000;
+  }
+  ion-tab-button {
+    background: #000;
+  }
+}

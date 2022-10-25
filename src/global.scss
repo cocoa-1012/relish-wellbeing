@@ -1,0 +1,130 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+// @import "~@ionic/angular/css/padding.css";
+// @import "~@ionic/angular/css/float-elements.css";
+// @import "~@ionic/angular/css/text-alignment.css";
+// @import "~@ionic/angular/css/text-transformation.css";
+// @import "~@ionic/angular/css/flex-utils.css";
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+.ion-color-cinderella {
+  --ion-color-base: var(--ion-color-cinderella);
+  --ion-color-base-rgb: var(--ion-color-cinderella-rgb);
+  --ion-color-contrast: var(--ion-color-cinderella-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-cinderella-contrast-rgb);
+  --ion-color-shade: var(--ion-color-cinderella-shade);
+  --ion-color-tint: var(--ion-color-cinderella-tint);
+}
+
+.ion-color-purple {
+  --ion-color-base: var(--ion-color-purple);
+  --ion-color-base-rgb: var(--ion-color-purple-rgb);
+  --ion-color-contrast: var(--ion-color-purple-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-purple-contrast-rgb);
+  --ion-color-shade: var(--ion-color-purple-shade);
+  --ion-color-tint: var(--ion-color-purple-tint);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ion-color-secondary {
+  border: 2px solid var(--ion-color-secondary-contrast);
+  border-radius: 4px;
+}
+
+.ion-color-dark-green {
+  --ion-color-base: var(--ion-color-dark-green);
+  --ion-color-base-rgb: var(--ion-color-dark-green-rgb);
+  --ion-color-contrast: var(--ion-color-dark-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-dark-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-dark-green-shade);
+  --ion-color-tint: var(--ion-color-dark-green-tint);
+}
+
+.ion-color-light-green {
+  --ion-color-base: var(--ion-color-light-green);
+  --ion-color-base-rgb: var(--ion-color-light-green-rgb);
+  --ion-color-contrast: var(--ion-color-light-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-green-shade);
+  --ion-color-tint: var(--ion-color-light-green-tint);
+}
+
+.ion-color-orange {
+  --ion-color-base: var(--ion-color-orange);
+  --ion-color-base-rgb: var(--ion-color-orange-rgb);
+  --ion-color-contrast: var(--ion-color-orange-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-orange-contrast-rgb);
+  --ion-color-shade: var(--ion-color-orange-shade);
+  --ion-color-tint: var(--ion-color-orange-tint);
+}
+
+.ion-color-blue {
+  --ion-color-base: var(--ion-color-blue);
+  --ion-color-base-rgb: var(--ion-color-blue-rgb);
+  --ion-color-contrast: var(--ion-color-blue-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-blue-contrast-rgb);
+  --ion-color-shade: var(--ion-color-blue-shade);
+  --ion-color-tint: var(--ion-color-blue-tint);
+}
+
+.ion-color-aquamarine {
+  --ion-color-base: var(--ion-color-aquamarine);
+  --ion-color-base-rgb: var(--ion-color-aquamarine-rgb);
+  --ion-color-contrast: var(--ion-color-aquamarine-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-aquamarine-contrast-rgb);
+  --ion-color-shade: var(--ion-color-aquamarine-shade);
+  --ion-color-tint: var(--ion-color-aquamarine-tint);
+}
+
+.native-input.sc-ion-input-ios:-webkit-autofill, input:-internal-autofill-selected {
+  background-color:transparent !important;
+}
+
+@media only screen and (min-width: 768px) and (min-height: 600px) {
+  :root {
+    ion-modal {
+      --width: 90%;
+      --height: 85%;
+    }
+  }
+}
+
+@import "~@mobiscroll/angular/dist/css/mobiscroll.scss";
+
+
+.mbsc-ios-dark.mbsc-fr-inline .mbsc-fr-c {
+  border: 0 !important;
+}
+.mbsc-ios-dark.mbsc-ev-cal .mbsc-fr-w {
+  border: 0;
+}
+
+.mbsc-ios-dark.mbsc-ev-cal.mbsc-fr-md .mbsc-cal-cell {
+  border: 0;
+  border-top: 1px solid #333333;
+  border-left: 1px solid #333333;
+}

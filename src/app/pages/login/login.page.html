@@ -1,0 +1,246 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="cinderella">
+    <div class="logo-container">
+      <img src="/assets/logo.svg">
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content color="cinderella">
+  <div class="h-screen flex flex-col justify-center">
+    <div *ngIf="mode == 'menu'">
+      <div class="slider-container">
+        <ion-slides pager="true" [options]="slideOpts">
+          <ion-slide>
+            <img src="/assets/landing/welcome1_100sActivitiesIcon.svg">
+            <p class="text-black mt-4 mb-10">100’s of Activity Ideas</p>
+          </ion-slide>
+          <ion-slide>
+            <img src="/assets/landing/welcome2_PaperworkSaveIcon.svg">
+            <p class="text-black mt-4 mb-10">Save hours on paperwork</p>
+          </ion-slide>
+          <ion-slide>
+            <img src="/assets/landing/welcome3_WellbeingData.svg">
+            <p class="text-black mt-4 mb-10">Residents Wellbeing Data</p>
+          </ion-slide>
+          <ion-slide>
+            <img src="/assets/landing/welcome4_conncetsfamiliesIcon.svg">
+            <p class="text-black mt-4 mb-10">Connects families and residents</p>
+          </ion-slide>
+        </ion-slides>
+      </div>
+
+      <div class="welcome-intro mt-4 text-center text-black max-w-lg mx-auto px-4">
+        <h1 class="text-2xl font-bold">Welcome to Relish Wellbeing</h1>
+        <p class="mt-2">By Relish, your trusted activities partner!</p>
+
+        <ion-button expand="block" color="purple" class="mt-5" (click)="mode = 'signup'">Sign up</ion-button>
+        <ion-button expand="block" color="purple" class="mt-5" (click)="mode = 'login'">Login</ion-button>
+        <ion-button expand="block" color="purple" class="mt-5" (click)="mode = 'create'">I received a code</ion-button>
+        <small>* Applies to new users joining their care organisation</small>
+      </div>
+    </div>
+
+    <div *ngIf="mode == 'signup'">
+      <div class="max-w-lg mx-auto px-4 text-center">
+        <h1 class="text-2xl font-bold mb-6">Sign up for Relish Wellbeing</h1>
+        <ion-button type="submit" expand="block" color="purple" class="mb-4" (click)="type='Family'; mode='register'">I am a family carer</ion-button>
+        <ion-button type="submit" expand="block" color="purple" (click)="type='Professional'; mode='register'">I work in care</ion-button>
+        <ion-button color="secondary" expand="block" class="mt-6 text-purple-500" (click)="mode='menu'">Back</ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="mode == 'register'">
+      <form (ngSubmit)="register()" [formGroup]="registration" class="max-w-lg mx-auto px-4">
+
+        <div class="rounded overflow-hidden mb-4 border border-gray-300">
+          <ion-item>
+            <ion-input type="text" formControlName="registration_name" placeholder="Name" autocomplete="name" autofocus="true" required="true"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(registration_name.dirty || registration_name.touched) && registration_name.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="registration_name.errors?.required">The name field is required.</span>
+            </div>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="email" formControlName="registration_email" placeholder="Email" autocomplete="email" inputmode="email" required="true"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(registration_email.dirty || registration_email.touched) && registration_email.errors" >
+            <div class="errors text-red-600">
+              <span *ngIf="registration_email.errors?.required">The email field is required.</span>
+              <span *ngIf="registration_email.errors?.email">The email must be a valid email address.</span>
+            </div>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-input type="password" placeholder="Password" formControlName="registration_password" autocomplete="new-password" required="true" clearOnEdit="false"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(registration_password.dirty || registration_password.touched) && registration_password.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="registration_password.errors?.required">The password field is required.</span>
+              <span *ngIf="registration_password.errors?.minlength">The password field must be at least 6 characters.</span>
+            </div>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-input type="password" placeholder="Confirm Password" formControlName="registration_password_confirmation" autocomplete="new-password" required="true" clearOnEdit="false"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(registration_password_confirmation.dirty || registration_password_confirmation.touched) && registration_password_confirmation.errors" lines="none">
+            <div class="errors text-red-600">
+              <span *ngIf="registration_password_confirmation.errors?.required">The confirm password field is required.</span>
+              <span *ngIf="!registration_password_confirmation.errors?.required && registration_password_confirmation != registration_password">The password fields must match.</span>
+            </div>
+          </ion-item>
+
+        </div>
+        <div class="rounded overflow-hidden mb-4 border border-gray-300">
+          <ion-item *ngIf="type == 'Professional'" lines="none">
+            <ion-input type="text" formControlName="registration_organisation" placeholder="Organisation" autocomplete="organization" autofocus="true" required="true" ></ion-input>
+          </ion-item>
+          <ion-item *ngIf="type == 'Professional' && (registration_organisation.dirty || registration_organisation.touched) && registration_organisation.errors" lines="none">
+            <div class="errors text-red-600">
+              <span *ngIf="registration_organisation.errors?.required">The organisation field is required.</span>
+            </div>
+          </ion-item>
+        </div>
+
+        <p class="mt-2 text-sm text-gray-500 text-center">By pressing "Sign up" I agree to Relish Wellbeing <a>Terms of service</a> and <a>Privacy Policy</a></p>
+
+        <ion-button type="submit" expand="block" color="purple" class="mt-4" [disabled]="!registration.valid">Sign up</ion-button>
+
+
+        <div class="flex flex-col mt-6 pt-6 border-t border-gray-400">
+          <p class="mt-2 text-sm text-gray-500 text-center">Already have an account?</p>
+          <ion-button expand="block" color="secondary" (click)="mode='login'">Login</ion-button>
+          <ion-button color="secondary" expand="block" class="mt-6 text-purple-500" (click)="mode='signup'">Back</ion-button>
+        </div>
+
+      </form>
+
+    </div>
+
+
+    <div *ngIf="mode == 'login'">
+      <form (ngSubmit)="login()" [formGroup]="credentials" class="max-w-lg mx-auto px-4">
+
+        <div class="rounded overflow-hidden mb-4 border border-gray-300">
+          <ion-item>
+            <ion-input type="email" formControlName="email" placeholder="Email" autocomplete="email" autofocus="true" inputmode="email" required="true"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(email.dirty || email.touched) && email.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="email.errors?.required">The email field is required.</span>
+              <span *ngIf="email.errors?.email">The email must be a valid email address.</span>
+            </div>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-input type="password" placeholder="Password" formControlName="password" autocomplete="current-password" required="true"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(password.dirty || password.touched) && password.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="password.errors?.required">The password field is required.</span>
+              <span *ngIf="password.errors?.minlength">The password field must be at least 6 characters.</span>
+            </div>
+          </ion-item>
+        </div>
+
+        <ion-button type="submit" expand="block" color="purple" [disabled]="!credentials.valid">Log in</ion-button>
+        <ion-button class="mt-6" color="secondary" expand="block" (click)="mode='reset'">Forgot your password</ion-button>
+        <div class="flex flex-col mt-6 pt-6 border-t border-gray-400">
+          <p class="mt-2 text-sm text-gray-500 text-center">Dont have an account?</p>
+          <ion-button expand="block" color="secondary">Sign up</ion-button>
+          <ion-button color="secondary" expand="block" (click)="mode='menu'">Back</ion-button>
+        </div>
+
+      </form>
+
+
+    </div>
+
+    <div *ngIf="mode == 'reset'">
+
+      <form (ngSubmit)="start_reset()" [formGroup]="reset_part_1" class="max-w-lg mx-auto px-4">
+        <h1 class="text-2xl font-bold text-center">Reset password</h1>
+        <p class="mb-2 text-sm text-gray-500 text-center">Enter your email to get started</p>
+        <div class="rounded overflow-hidden mb-4 border border-gray-300">
+          <ion-item lines="none">
+            <ion-input type="email" formControlName="reset_email" placeholder="Email" autocomplete="email" autofocus="true" inputmode="email" required="true"></ion-input>
+
+          </ion-item>
+          <ion-item *ngIf="(reset_email.dirty || reset_email.touched) && reset_email.errors" lines="none" >
+            <div class="errors text-red-600">
+              <span *ngIf="reset_email.errors?.required">The email field is required.</span>
+              <span *ngIf="reset_email.errors?.email">The email must be a valid email address.</span>
+            </div>
+          </ion-item>
+
+        </div>
+
+        <ion-button type="submit" expand="block" color="purple" [disabled]="!reset_part_1.valid">Reset</ion-button>
+        <ion-button color="secondary" expand="block" class="mt-6 text-purple-500" (click)="mode='menu'">Back</ion-button>
+      </form>
+    </div>
+
+    <div *ngIf="mode == 'create'">
+      <h1 class="text-2xl font-bold text-center">Create a new password</h1>
+      <p class="mb-2 text-sm text-gray-500 text-center">Use the code that has been sent to you</p>
+
+      <form (ngSubmit)="complete_reset()" [formGroup]="reset_part_2" class="max-w-lg mx-auto px-4">
+
+        <div class="rounded overflow-hidden mb-4 border border-gray-300">
+
+          <ion-item>
+            <ion-input type="email" formControlName="reset_email" placeholder="Email" autocomplete="email" inputmode="email" required="true"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(reset_email.dirty || reset_email.touched) && reset_email.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="reset_email.errors?.required">The email field is required.</span>
+              <span *ngIf="reset_email.errors?.email">The email must be a valid email address.</span>
+            </div>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="text" formControlName="reset_code" placeholder="Code" inputmode="numeric" required="true"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(reset_code.dirty || reset_code.touched) && reset_code.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="reset_code.errors?.required">The code field is required.</span>
+            </div>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-input type="password" placeholder="New Password" formControlName="reset_password" autocomplete="new-password" required="true" clearOnEdit="false"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(reset_password.dirty || reset_password.touched) && reset_password.errors">
+            <div class="errors text-red-600">
+              <span *ngIf="reset_password.errors?.required">The password field is required.</span>
+              <span *ngIf="reset_password.errors?.minlength">The password field must be at least 6 characters.</span>
+            </div>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-input type="password" placeholder="Confirm Password" formControlName="reset_password_confirmation" autocomplete="new-password" required="true" clearOnEdit="false"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="(reset_password_confirmation.dirty || reset_password_confirmation.touched) && reset_password_confirmation.errors"  lines="none">
+            <div class="errors text-red-600">
+              <span *ngIf="reset_password_confirmation.errors?.required">The confirm password field is required.</span>
+              <span *ngIf="!reset_password_confirmation.errors?.required && reset_password_confirmation != reset_password">The password fields must match.</span>
+            </div>
+          </ion-item>
+
+        </div>
+
+        <ion-button type="submit" expand="block" color="purple" [disabled]="!reset_part_2.valid">Set Password</ion-button>
+        <ion-button color="secondary" expand="block" class="mt-6 text-purple-500" (click)="mode='menu'">Back</ion-button>
+      </form>
+    </div>
+
+  </div>
+
+
+</ion-content>

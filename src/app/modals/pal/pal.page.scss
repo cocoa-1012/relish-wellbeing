@@ -1,0 +1,58 @@
+.level {
+    width: 100px;
+    height: 100px;
+    margin: 4rem auto;
+    &.level-1 {background: url(../../../assets/levels/reflex.svg);background-size: contain;}
+    &.level-2 {background: url(../../../assets/levels/sensory.svg);background-size: contain;}
+    &.level-3 {background: url(../../../assets/levels/exploratory.svg);background-size: contain;}
+    &.level-4 {background: url(../../../assets/levels/planned.svg);background-size: contain;}
+}
+
+.selBG {
+    --border-width: 2px;
+    --box-shadow: 2px 2px 4px;
+}
+
+.questions {
+  ion-list {
+    background: transparent;
+  }
+  ion-button {
+    height: auto;
+    white-space: normal;
+    text-align: left;
+  }
+
+}
+
+.chip-color-1 {
+  background-color: #DB7C2E;
+}
+.chip-color-2 {
+  background-color: #48A1DB;
+}
+.chip-color-3 {
+  background-color: #74A733;
+}
+.chip-color-4 {
+  background-color: #F4D069;
+}
+
+.swiper-slide {
+  overflow-y: scroll;    
+  display: block;    
+}
+ion-progress-bar {
+  --buffer-background: #e187af;
+  --progress-background: var(--ion-color-purple);
+}
+.item-button::part(native) {
+  color: darkgreen;
+  border-color: darkgreen;
+}
+@media (prefers-color-scheme: dark) {
+  .item-button::part(native) {
+    color: #fff;
+    border-color: #fff;
+  }
+}

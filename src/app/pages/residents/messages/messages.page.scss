@@ -1,0 +1,36 @@
+
+
+.chat-container {
+  display: flex;
+  min-height: 100%;
+  align-items: flex-end;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  .pull-left {
+      background: #FAE4B8;
+      color: #444;
+      margin-right: auto;
+  }
+  .pull-right {
+      background: #E7FAFC;
+      color: #444;
+  }
+}
+
+
+.limit-img::part(image) {
+  max-height: 200px;
+}
+
+
+.message-image, .message-image::part(image) {
+  width: 300px;
+  height: 168px;
+  object-fit: cover;
+  object-position: center;
+}
+
+ion-progress-bar {
+  --buffer-background: #e187af;
+  --progress-background: var(--ion-color-purple);
+}

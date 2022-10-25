@@ -1,0 +1,7 @@
+{
+  "name": "relish-wellbeing",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
